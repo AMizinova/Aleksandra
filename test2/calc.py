@@ -2,7 +2,7 @@
 
 str_command = input("Please type command a + b or a-b: ")
 
-stroka_ss = ''
+stroka_sss = ''
 str_A = ''
 
 stroka_ness = ''
