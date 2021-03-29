@@ -1,4 +1,3 @@
-
 instr = input('что вычислить? ')
 print(instr)
 
@@ -53,7 +52,7 @@ while i < len(actions):
            eval_str = (actions[i-1].get('val') + operation + action.get('val'))
            pre_res = eval(eval_str)
            #pre_res = eval('{0}{1}{2}'.format(float(actions[i-1].get('val')),operation,float(action.get('val'))))
-           action[i-1]['val'] = str(pre_res)
+           actions[i-1]['val'] = str(pre_res)
          actions.pop(i)
      else:
          i += 1
