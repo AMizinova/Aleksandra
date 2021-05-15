@@ -2,6 +2,17 @@
 Разработка умного помощника для выбора автомобилей ГАЗа в телеграмме
    Поключение чат бота к БД сайта ГАЗа, чтобы брать оттуда информацию по модельному ряду автомобилей (можно использовать json)
 """
+pip install pdfminer.six
+#извлечение текста из пдф
+pip install PyPDF2
+with open('bd.pdf', 'rb') as pdf_file: pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+# printing first page contents 
+pdf_page = pdf_reader.getPage(0) 
+print(pdf_page.extractText()) 
+# reading all the pages content one by one 
+for page_num in range(pdf_reader.numPages): pdf_page = pdf_reader.getPage(page_num) 
+print(pdf_page.extractText())
+
 import telebot
 
 bot = telebot.TeleBot('1814213523:AAFn5L9HQH6De-S7fQxbQTsJbTKaPxupN1M')
@@ -25,7 +36,8 @@ else:
    def start_message(message):
 	bot.send_message(message.chat.id, 'Какая цель покупки автомобиля?')
   print(message)
- """
+  
+ """ пока не знаю как сделать варианты ответа на питоне
    Появляются варианты ответа:
       "Перевозка людей",
       "Первезка грузов", 
