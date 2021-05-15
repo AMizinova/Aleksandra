@@ -1,11 +1,31 @@
 """
 Разработка умного помощника для выбора автомобилей ГАЗа в телеграмме
    Поключение чат бота к БД сайта ГАЗа, чтобы брать оттуда информацию по модельному ряду автомобилей (можно использовать json)
-   
+"""
+import telebot
+
+bot = telebot.TeleBot('1814213523:AAFn5L9HQH6De-S7fQxbQTsJbTKaPxupN1M')
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+	bot.send_message(message.chat.id, 'Добро пожаловать')
+    if message.text == "Привет":
+    bot.send_message(message.from_user.id, "Привет, чем я могу тебе помочь?")
+elif message.text == "/help":
+    bot.send_message(message.from_user.id, "Напиши привет")
+else:
+    bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
+    print(message)
+
+"""
    Пользователь заходит в чат бот
    
-   Появляется вопрос "Какая цель покупки автомобиля?"
-   
+   Появляется вопрос "Какая цель покупки автомобиля?" 
+   """
+   def start_message(message):
+	bot.send_message(message.chat.id, 'Какая цель покупки автомобиля?')
+  print(message)
+ """
    Появляются варианты ответа:
       "Перевозка людей",
       "Первезка грузов", 
