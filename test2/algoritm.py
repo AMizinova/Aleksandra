@@ -2,73 +2,54 @@
 Разработка умного помощника для выбора автомобилей ГАЗа в телеграмме
    Поключение чат бота к БД сайта ГАЗа, чтобы брать оттуда информацию по модельному ряду автомобилей (можно использовать json)
 """
-import pdfminer
-#извлечение текста из пдф
-import io
- 
-from pdfminer.converter import TextConverter
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfpage import PDFPage
- 
-def extract_text_by_page(pdf_path):
-    with open(pdf_path, 'rb') as fh:
-        for page in PDFPage.get_pages(fh, 
-                                      caching=True,
-                                      check_extractable=True):
-            resource_manager = PDFResourceManager()
-            fake_file_handle = io.StringIO()
-            converter = TextConverter(resource_manager, fake_file_handle)
-            page_interpreter = PDFPageInterpreter(resource_manager, converter)
-            page_interpreter.process_page(page)
- 
-            text = fake_file_handle.getvalue()
-            yield text
- 
-            # close open handles
-            converter.close()
-            fake_file_handle.close()
- 
-def extract_text(pdf_path):
-    for page in extract_text_by_page(pdf_path):
-        print(page)
-        print()
- 
-if __name__ == '__main__':
-    print(extract_text('bd.pdf'))
 
 import telebot
+from telebot import types
 
-bot = telebot.TeleBot('1814213523:AAFn5L9HQH6De-S7fQxbQTsJbTKaPxupN1M')
+bot = telebot.TeleBot('1764276505:AAH0ixmIK4HNo5yT470zagZkIwY0eaR0P8g')
 
 @bot.message_handler(commands=['start'])
-def start_message(message):
-    if message.text == "Привет":
-       bot.send_message(message.from_user.id, "Привет, чем я могу тебе помочь?")
-    elif message.text == "/help":
-       bot.send_message(message.from_user.id, "Напиши привет")
-    else:
-       bot.send_message(message.from_user.id, "Я тебя не понимаю. Напиши /help.")
-print(message)
-
-"""
-   Пользователь заходит в чат бот
-   
-   Появляется вопрос "Какая цель покупки автомобиля?" 
-   """
-def start_message(message):
-	bot.send_message(message.chat.id, 'Какая цель покупки автомобиля?')
-print(message)
+def welcome(message):
+    bot.send_message(message.from_user.id, "Привет, это Умный помощник! Я хочу помочь тебе с выбором! Для чего ты хочешь купить автомобиль?", reply_markup=sign_markup)
 
 
 """
- пока не знаю как сделать варианты ответа на питоне
+
    Появляются варианты ответа:
       "Перевозка людей",
       "Первезка грузов", 
       "Коммунальные машины", 
       "Бизнес"
    Пользователь выбирает один из вариантов
+"""
+sign_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+people = types.KeyboardButton('Перевозка людей')
+goods = types.KeyboardButton('Перевозка грузов')
+utility = types.KeyboardButton('Коммунальные машины')
+business = types.KeyboardButton('Бизнес')
+sign_markup.add(people, goods, utility, business)
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+    if message.text == "/help":
+       bot.send_message(message.from_user.id, "Напиши привет")
+    elif  message.text == "Перевозка людей":
+       bot.send_message(message.from_user.id, "Какая у вас категория прав?")
+    elif  message.text == "Перевозка грузов":
+       bot.send_message(message.from_user.id, "Какой у вас тип груза?")
+    elif  message.text == "Коммунальные машины":
+       bot.send_message(message.from_user.id, "Предлагаю такой выбор автомобилей")
+    elif  message.text == "Бизнес":
+       bot.send_message(message.from_user.id, "Предлагаю такой выбор автомобилей")
+       
+bot.polling()
+
+
+
+   
+
+   
+"""
    
    Модельный ряд фильтруется в соответсвии с выбранным вариантом с помощью фильтра на питоне, либо сортировки
    
